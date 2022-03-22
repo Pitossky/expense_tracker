@@ -12,7 +12,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+          titleLarge: const TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+          )
+        ),
+        appBarTheme: AppBarTheme(
+          titleTextStyle: ThemeData.light().textTheme.copyWith(
+            titleLarge: const TextStyle(
+              fontFamily: 'Quicksand',
+              fontSize: 25,
+              fontWeight: FontWeight.bold
+            )
+          ).headline6
+        )
       ),
       home: Home(),
     );

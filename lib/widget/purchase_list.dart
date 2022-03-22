@@ -10,9 +10,28 @@ class PurchaseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: MediaQuery.of(context).size.height,
       //color: Colors.blue,
-      child: ListView.builder(
+      child: purchases.isEmpty ? Column(
+        children: [
+          Text(
+            'Please click the button below to add a Transaction!',
+            style: Theme.of(context).textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            //height: MediaQuery.of(context).size.height,
+            child: Image.asset(
+                'assets/images/waiting.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ],
+      ) : ListView.builder(
         itemCount: purchases.length,
         itemBuilder: (_, index) {
           return Card(
@@ -26,16 +45,17 @@ class PurchaseList extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                       width: 2,
+
                     ),
                   ),
                   child: Text(
-                    '\$${purchases[index].transactionAmount}',
-                    style: const TextStyle(
+                    '\$${purchases[index].transactionAmount.toStringAsFixed(2)}',
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
-                      color: Colors.purple,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -47,10 +67,7 @@ class PurchaseList extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 5),
                       child: Text(
                         purchases[index].transactionTitle,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: Theme.of(context).textTheme.titleLarge
                       ),
                     ),
                     Text(
