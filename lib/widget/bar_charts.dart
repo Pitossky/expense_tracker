@@ -13,19 +13,25 @@ class BarCharts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final query = MediaQuery.of(context).size;
+    final themeVar = Theme.of(context);
+
     return Column(
       children: [
         SizedBox(
-          height: 20,
+          height: query.height * 0.03,
           child: FittedBox(
-            child: Text('\$${totalAmountSpent.toStringAsFixed(0)}',
-            style: Theme.of(context).textTheme.titleLarge,
+            child: Text(
+              '\$${totalAmountSpent.toStringAsFixed(0)}',
+              style: themeVar.textTheme.titleLarge,
             ),
           ),
         ),
-        const SizedBox(height: 4,),
-        Container(
-          height: 60,
+        SizedBox(
+          height: query.height * 0.005,
+        ),
+        SizedBox(
+          height: query.height * 0.09,
           width: 10,
           child: Stack(
             children: [
@@ -35,15 +41,22 @@ class BarCharts extends StatelessWidget {
                     color: Colors.blueGrey,
                     width: 2,
                   ),
-                  color: const Color.fromRGBO(220, 220, 220, 1),
-                  borderRadius: BorderRadius.circular(10),
+                  color: const Color.fromRGBO(
+                    220,
+                    220,
+                    220,
+                    1,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    10,
+                  ),
                 ),
               ),
               FractionallySizedBox(
                 heightFactor: spendingPercent,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: themeVar.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -51,14 +64,19 @@ class BarCharts extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(
-          height: 4,
+        SizedBox(
+          height: query.height * 0.005,
         ),
-        Text(
-          weekLabel,
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 18,
+        SizedBox(
+          height: query.height * 0.027,
+          child: FittedBox(
+            child: Text(
+              weekLabel,
+              style: const TextStyle(
+                fontWeight: FontWeight.w400,
+                fontSize: 18,
+              ),
+            ),
           ),
         ),
       ],

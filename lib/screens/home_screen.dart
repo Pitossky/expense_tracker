@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../model/transaction_model.dart';
 
 class Home extends StatefulWidget {
-
   @override
   State<Home> createState() => _HomeState();
 }
@@ -18,6 +17,12 @@ class _HomeState extends State<Home> {
       transactionId: 't1',
       transactionTitle: 'New Shoes',
       transactionAmount: 70.5,
+      transactionDate: DateTime.now(),
+    ),
+    TransactionModel(
+      transactionId: 't2',
+      transactionTitle: 'New Bag',
+      transactionAmount: 30.5,
       transactionDate: DateTime.now(),
     ),
     TransactionModel(
@@ -39,12 +44,13 @@ class _HomeState extends State<Home> {
     }).toList();
   }
 
-  void _addNewTransaction(String addTitle, double addAmount){
+  void _addNewTransaction(
+      String addTitle, double addAmount, DateTime datePicked) {
     final newTransaction = TransactionModel(
       transactionId: DateTime.now().toString(),
       transactionTitle: addTitle,
       transactionAmount: addAmount,
-      transactionDate: DateTime.now(),
+      transactionDate: datePicked,
     );
 
     setState(() {
@@ -52,49 +58,66 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void _transactionBottomSheet(BuildContext context){
+  void _transactionBottomSheet(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        builder: (_){
-          return TransactionTextfield(
-              addTransactionFunction: _addNewTransaction,
-          );
-        },
+      context: context,
+      builder: (_) {
+        return TransactionTextfield(
+          addTransactionFunction: _addNewTransaction,
+        );
+      },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _transactionList
+          .removeWhere((transaction) => transaction.transactionId == id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final query = MediaQuery.of(context);
+
+    final appBar = AppBar(
+      title: const Text("Expense Tracker"),
+    );
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expense Tracker"),
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            TransactionChart(
+            SizedBox(
+              height: (query.size.height -
+                      appBar.preferredSize.height -
+                      query.padding.top) *
+                  0.3,
+              child: TransactionChart(
                 recentTransactionList: recentChartList,
-            ),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Text(
-                'List of Purchases',
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 23
-                ),
               ),
             ),
-            PurchaseList(purchases: _transactionList),
+            SizedBox(
+              height: (query.size.height -
+                      appBar.preferredSize.height -
+                      query.padding.top) *
+                  0.8,
+              child: PurchaseList(
+                purchases: _transactionList,
+                deleteFnc: _deleteTransaction,
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _transactionBottomSheet(context),
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+        ),
       ),
-     // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

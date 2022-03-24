@@ -10,7 +10,7 @@ class TransactionChart extends StatelessWidget {
 
   List<Map<String, Object>> get groupTransactions {
     return List.generate(7, (index) {
-      final weekday = DateTime.now().add(
+      final weekday = DateTime.now().subtract(
         Duration(days: index),
       );
       double totalTransactionAmount = 0.0;
@@ -27,7 +27,7 @@ class TransactionChart extends StatelessWidget {
         'day': DateFormat.E().format(weekday).substring(0, 2),
         'amount': totalTransactionAmount,
       };
-    });
+    }).reversed.toList();
   }
 
   double get maximumAmountSpent {
@@ -42,22 +42,26 @@ class TransactionChart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10),
+          padding: const EdgeInsets.symmetric(
+            vertical: 7.0,
+            horizontal: 10,
+          ),
           child: Text(
             'Transaction Chart',
             style: TextStyle(
                 color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 19),
+                fontSize: 19,
+            ),
           ),
         ),
         Card(
           elevation: 6,
-          margin: const EdgeInsets.only(
+          margin: EdgeInsets.only(
             left: 20,
             right: 20,
-            bottom: 20,
-            top: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom * 5,
+            top: 0.5,
           ),
           child: Container(
             margin: const EdgeInsets.all(7),
@@ -69,8 +73,10 @@ class TransactionChart extends StatelessWidget {
                   child: BarCharts(
                     weekLabel: individualChart['day'].toString(),
                     totalAmountSpent: individualChart['amount'] as double,
-                    spendingPercent: maximumAmountSpent == 0.0 ? 0.0 :
-                        (individualChart['amount'] as double) / maximumAmountSpent,
+                    spendingPercent: maximumAmountSpent == 0.0
+                        ? 0.0
+                        : (individualChart['amount'] as double) /
+                            maximumAmountSpent,
                   ),
                 );
               }).toList(),
